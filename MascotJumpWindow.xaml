@@ -8,7 +8,7 @@
         Topmost="True"
         ShowInTaskbar="False">
     <Grid>
-        <Image x:Name="MascotImage" Source="Images/mascot.png" Stretch="Uniform" Width="120" Height="120"/>
+        <Image x:Name="MascotImage" Stretch="Uniform" Width="120" Height="120"/>
         <Button x:Name="ExitJumpModeButton" Content="×" Width="32" Height="32" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,8,8,0" Click="ExitJumpModeButton_Click"/>
     </Grid>
 </Window> 

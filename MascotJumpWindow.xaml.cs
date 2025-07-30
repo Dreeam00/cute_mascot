@@ -5,6 +5,9 @@ using System.Windows.Threading;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Threading.Tasks;
+using System.IO; // 追加
+using Newtonsoft.Json.Linq; // 追加
+using System.Windows.Media.Imaging; // 追加
 
 namespace MascotApp
 {
@@ -26,6 +29,7 @@ namespace MascotApp
         private bool tagMode = false;
         private bool isChaser = false; // 鬼ごっこで追いかける側か
         private Random random = new Random();
+        private string currentMascotName = "Mascot"; // 追加
 
         public event Action? OnExitJumpMode;
 
@@ -36,6 +40,33 @@ namespace MascotApp
             this.isChaser = isChaser;
             Loaded += MascotJumpWindow_Loaded;
             MascotImage.MouseLeftButtonDown += MascotImage_MouseLeftButtonDown;
+            LoadCurrentMascotName(); // 追加
+            SetMascotImageSource(); // 追加
+        }
+
+        private void LoadCurrentMascotName() // 追加
+        {
+            try
+            {
+                string settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.json");
+                if (File.Exists(settingsPath))
+                {
+                    string json = File.ReadAllText(settingsPath);
+                    JObject settings = JObject.Parse(json);
+                    currentMascotName = settings["current_mascot"]?.ToString() ?? "Mascot";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"設定ファイルの読み込みに失敗しました: {ex.Message}");
+                currentMascotName = "Mascot"; // エラー時はデフォルトに設定
+            }
+        }
+
+        private void SetMascotImageSource() // 追加
+        {
+            string imagePath = $"/mascot_image_priset/{currentMascotName}/{currentMascotName}.png";
+            MascotImage.Source = new BitmapImage(new Uri(imagePath, UriKind.RelativeOrAbsolute));
         }
 
         private void MascotJumpWindow_Loaded(object sender, RoutedEventArgs e)

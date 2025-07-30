@@ -10,6 +10,7 @@ using System.Drawing; // スクリーンショット用
 using System.Drawing.Imaging; // スクリーンショット用
 using System.IO; // メモリストリーム用
 using System.Windows.Media; // ImageBrush用
+using Newtonsoft.Json.Linq; // 追加
 
 namespace MascotApp
 {
@@ -26,6 +27,7 @@ namespace MascotApp
         private double screenH;
         private Random random = new Random();
         private int actionCounter = 0;
+        private string currentMascotName = "Mascot"; // 追加
 
         public event Action? OnExitWalkMode;
 
@@ -33,6 +35,33 @@ namespace MascotApp
         {
             InitializeComponent();
             Loaded += WalkWindow_Loaded;
+            LoadCurrentMascotName(); // 追加
+            SetMascotImageSource(); // 追加
+        }
+
+        private void LoadCurrentMascotName() // 追加
+        {
+            try
+            {
+                string settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.json");
+                if (File.Exists(settingsPath))
+                {
+                    string json = File.ReadAllText(settingsPath);
+                    JObject settings = JObject.Parse(json);
+                    currentMascotName = settings["current_mascot"]?.ToString() ?? "Mascot";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"設定ファイルの読み込みに失敗しました: {ex.Message}");
+                currentMascotName = "Mascot"; // エラー時はデフォルトに設定
+            }
+        }
+
+        private void SetMascotImageSource() // 追加
+        {
+            string imagePath = $"/mascot_image_priset/{currentMascotName}/{currentMascotName}.png";
+            MascotImage.Source = new BitmapImage(new Uri(imagePath, UriKind.RelativeOrAbsolute));
         }
 
         private void WalkWindow_Loaded(object sender, RoutedEventArgs e)

@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -7,6 +8,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace MascotApp
 {
@@ -19,6 +21,7 @@ namespace MascotApp
         private MascotJumpWindow? mascotJumpWindow;
         private Random random = new Random();
         private bool isDraggingMascot = false;
+        private string currentMascot = "Lumina"; // デフォルトのマスコット
 
         // なでなでエフェクト用
         private double lastMouseX = -1;
@@ -33,10 +36,39 @@ namespace MascotApp
         public MainWindow()
         {
             InitializeComponent();
+            LoadMascotSettings();
+            Messages.LoadMessages(currentMascot);
             InitializeTimers();
             SetupEventHandlers();
             SetupButtonTexts();
             HideBubbles();
+        }
+
+        private void LoadMascotSettings()
+        {
+            try
+            {
+                string settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.json");
+                if (File.Exists(settingsPath))
+                {
+                    string json = File.ReadAllText(settingsPath);
+                    dynamic? settings = JsonConvert.DeserializeObject(json);
+                    if (settings != null && settings.current_mascot != null)
+                    {
+                        currentMascot = settings.current_mascot?.ToString() ?? "Mascot";
+                    }
+                    // キャラクター名の先頭を大文字に変換
+                    if (!string.IsNullOrEmpty(currentMascot))
+                    {
+                        currentMascot = char.ToUpper(currentMascot[0]) + currentMascot.Substring(1);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // エラー処理
+                MessageBox.Show($"設定ファイルの読み込みに失敗しました: {ex.Message}");
+            }
         }
 
         private void InitializeTimers()
@@ -124,7 +156,7 @@ namespace MascotApp
             isDraggingMascot = true;
             CharacterImage.CaptureMouse();
             AnimateCharacter(); // クリック時のアニメーション
-            SetMascotImage("mascot_tickle.png"); // なでなでされた表情
+            SetMascotImage("tickle"); // なでなでされた表情
             idleAnimationTimer?.Stop(); // アイドルアニメーションを一時停止
             IncreaseMood(10); // クリックで気分上昇
             e.Handled = true;
@@ -134,7 +166,7 @@ namespace MascotApp
         {
             if (isDraggingMascot)
             {
-                SetMascotImage("mascot_happy.png"); // ドラッグ中は嬉しい表情
+                SetMascotImage("happy"); // ドラッグ中は嬉しい表情
                 // ウィンドウをマウスの位置に移動
                 this.Left = e.GetPosition(this.Parent as UIElement).X - (CharacterImage.ActualWidth / 2);
                 this.Top = e.GetPosition(this.Parent as UIElement).Y - (CharacterImage.ActualHeight / 2);
@@ -194,7 +226,7 @@ namespace MascotApp
             {
                 isDraggingMascot = false;
                 CharacterImage.ReleaseMouseCapture();
-                SetMascotImage("mascot.png"); // 元の画像に戻す
+                SetMascotImage("default"); // 元の画像に戻す
                 idleAnimationTimer?.Start(); // アイドルアニメーションを再開
             }
         }
@@ -269,34 +301,34 @@ namespace MascotApp
             switch (type)
             {
                 case 0: // 伸び
-                    SetMascotImage("mascot_stretch_start.png");
+                    SetMascotImage("stretch_start");
                     await Task.Delay(500);
-                    SetMascotImage("mascot_stretch_end.png");
+                    SetMascotImage("stretch_end");
                     await Task.Delay(500);
                     break;
                 case 1: // あくび
-                    SetMascotImage("mascot_yawn.png");
+                    SetMascotImage("yawn");
                     await Task.Delay(1000);
                     break;
                 case 2: // きょろきょろ
-                    SetMascotImage("mascot_look_left.png");
+                    SetMascotImage("look_left");
                     await Task.Delay(500);
-                    SetMascotImage("mascot_look_right.png");
+                    SetMascotImage("look_right");
                     await Task.Delay(500);
-                    SetMascotImage("mascot_look_up.png");
+                    SetMascotImage("look_up");
                     await Task.Delay(500);
                     break;
                 case 3: // 座る
-                    SetMascotImage("mascot_sit.png");
+                    SetMascotImage("sit");
                     await Task.Delay(2000); // 少し長めに座る
                     break;
                 case 4: // 寝転がる
-                    SetMascotImage("mascot_lie_down.png");
+                    SetMascotImage("lie_down");
                     await Task.Delay(3000); // 少し長めに寝転がる
                     break;
             }
             // 元の画像に戻す
-            SetMascotImage("mascot.png");
+            SetMascotImage("default");
         }
 
         private async void DoPettingEffect()
@@ -305,7 +337,7 @@ namespace MascotApp
             idleAnimationTimer?.Stop();
 
             // なでなでされた時の特別なアニメーションや表情
-            SetMascotImage("mascot_happy.png"); // なでなでされた時の特別な表情
+            SetMascotImage("happy"); // なでなでされた時の特別な表情
             ShowMascotBubble("なでなで、きもちいい〜！");
             IncreaseMood(20); // なでなでで気分上昇
 
@@ -313,7 +345,7 @@ namespace MascotApp
             await Task.Delay(2000);
 
             HideBubbles();
-            SetMascotImage("mascot.png"); // 元の画像に戻す
+            SetMascotImage("default"); // 元の画像に戻す
             idleAnimationTimer?.Start(); // アイドルアニメーションを再開
         }
 
@@ -325,18 +357,18 @@ namespace MascotApp
                 return;
             }
 
-            var monologueEntry = Messages.Monologues.MonologueList[random.Next(Messages.Monologues.MonologueList.Length)];
+            var monologueEntry = Messages.GetRandomMonologue();
             string monologue = monologueEntry.Text;
-            string imageName = monologueEntry.Image;
+            string imageState = monologueEntry.Image;
 
-            SetMascotImage(imageName);
+            SetMascotImage(imageState);
 
             ShowMascotBubble(monologue);
 
             // 独り言の表示時間
             await Task.Delay(TimeSpan.FromSeconds(random.Next(3, 6)));
             HideBubbles();
-            SetMascotImage("mascot.png"); // 独り言終了後、元の画像に戻す
+            SetMascotImage("default"); // 独り言終了後、元の画像に戻す
         }
 
         private void IncreaseMood(int amount)
@@ -361,29 +393,75 @@ namespace MascotApp
         {
             if (currentMood > 90)
             {
-                return "mascot_love.png"; // Love
+                return "love"; // Love
             }
             else if (currentMood > 70)
             {
-                return "mascot_happy.png"; // ごきげん
+                return "happy"; // ごきげん
             }
             else if (currentMood < 10)
             {
-                return "mascot_angry.png"; // Angry
+                return "angry"; // Angry
             }
             else if (currentMood < 30)
             {
-                return "mascot_sad.png"; // しょんぼり
+                return "sad"; // しょんぼり
             }
             else
             {
-                return "mascot.png"; // 普通
+                return "default"; // 普通
             }
         }
 
-        private void SetMascotImage(string imageName)
+        private void SetMascotImage(string state)
         {
-            CharacterImage.Source = new BitmapImage(new Uri($"pack://application:,,,/Images/{imageName}"));
+            string imageName = ""; // 初期化
+            string mascotPrefix = ""; // 初期化
+
+            // マスコットごとのファイル名プレフィックスを決定
+            if (currentMascot == "Lumina")
+            {
+                mascotPrefix = "Lumina";
+            }
+            else if (currentMascot == "Planet")
+            {
+                mascotPrefix = "planet"; // Planetはplanet_xxx.png
+            }
+            else // Mascot (デフォルト)
+            {
+                mascotPrefix = "mascot"; // Mascotはmascot_xxx.png
+            }
+
+            if (state == "default")
+            {
+                // デフォルト状態の場合、画像名はプレフィックスのみ (例: mascot.png, lumina.png, planet.png)
+                imageName = $"{mascotPrefix}.png";
+            }
+            else
+            {
+                // その他の状態の場合、プレフィックスと状態を組み合わせる
+                imageName = $"{mascotPrefix}_{state}.png";
+            }
+
+            string uri = $"pack://application:,,,/mascot_image_priset/{currentMascot}/{imageName}";
+
+            try
+            {
+                CharacterImage.Source = new BitmapImage(new Uri(uri));
+            }
+            catch
+            {
+                // デフォルト画像を試す
+                try
+                {
+                    string fallbackUri = $"pack://application:,,,/mascot_image_priset/{currentMascot}/{mascotPrefix}.png";
+                    CharacterImage.Source = new BitmapImage(new Uri(fallbackUri));
+                }
+                catch
+                {
+                    CharacterImage.Source = null;
+                }
+            }
         }
 
         
@@ -455,23 +533,23 @@ namespace MascotApp
         }
 
         // アクションボタンのイベントハンドラ
-        private void HandleConversation(string userText, string[] responses, string imageName)
+        private void HandleConversation(string userText, string responseCategory, string imageState)
         {
             ShowUserBubble(userText);
-            string mascotResponse = Messages.GetRandomMessage(responses);
+            string mascotResponse = Messages.GetRandomMessage(responseCategory);
             ShowMascotBubble(mascotResponse);
-            SetMascotImage(imageName);
+            SetMascotImage(imageState);
             autoHideTimer?.Start();
         }
 
         private void GreetingButton_Click(object sender, RoutedEventArgs e)
         {
-            HandleConversation(Messages.Prompts.Greeting, Messages.Responses.Greetings, "mascot_happy.png");
+            HandleConversation(Messages.Prompts.Greeting, "Greetings", "happy");
         }
 
         private void WeatherButton_Click(object sender, RoutedEventArgs e)
         {
-            HandleConversation(Messages.Prompts.Weather, Messages.Responses.Weather, "mascot_thoughtful.png");
+            HandleConversation(Messages.Prompts.Weather, "Weather", "thoughtful");
         }
 
         private void TimeButton_Click(object sender, RoutedEventArgs e)
@@ -479,68 +557,68 @@ namespace MascotApp
             ShowUserBubble(Messages.Prompts.Time);
             string mascotResponse = Messages.GetTimeMessage();
             ShowMascotBubble(mascotResponse);
-            SetMascotImage("mascot_look_up.png");
+            SetMascotImage("look_up");
             autoHideTimer?.Start();
         }
 
         private void JokeButton_Click(object sender, RoutedEventArgs e)
         {
-            HandleConversation(Messages.Prompts.Joke, Messages.Responses.Jokes, "mascot_happy.png");
+            HandleConversation(Messages.Prompts.Joke, "Jokes", "happy");
         }
 
         private void GoodbyeButton_Click(object sender, RoutedEventArgs e)
         {
-            HandleConversation(Messages.Prompts.Goodbye, Messages.Responses.Goodbyes, "mascot_sad.png");
+            HandleConversation(Messages.Prompts.Goodbye, "Goodbyes", "sad");
         }
 
         private void HowAreYouButton_Click(object sender, RoutedEventArgs e)
         {
-            HandleConversation(Messages.Prompts.HowAreYou, Messages.Responses.HowAreYou, "mascot_happy.png");
+            HandleConversation(Messages.Prompts.HowAreYou, "HowAreYou", "happy");
         }
 
         private void ComplimentButton_Click(object sender, RoutedEventArgs e)
         {
-            HandleConversation(Messages.Prompts.Compliment, Messages.Responses.Compliments, "mascot_love.png");
+            HandleConversation(Messages.Prompts.Compliment, "Compliments", "love");
         }
 
         private void MotivationButton_Click(object sender, RoutedEventArgs e)
         {
-            HandleConversation(Messages.Prompts.Motivation, Messages.Responses.Motivation, "mascot_happy.png");
+            HandleConversation(Messages.Prompts.Motivation, "Motivation", "happy");
         }
 
         private void AdviceButton_Click(object sender, RoutedEventArgs e)
         {
-            HandleConversation(Messages.Prompts.Advice, Messages.Responses.Advice, "mascot_thoughtful.png");
+            HandleConversation(Messages.Prompts.Advice, "Advice", "thoughtful");
         }
 
         private void StoryButton_Click(object sender, RoutedEventArgs e)
         {
-            HandleConversation(Messages.Prompts.Story, Messages.Responses.Stories, "mascot_happy.png");
+            HandleConversation(Messages.Prompts.Story, "Stories", "happy");
         }
 
         private void FoodButton_Click(object sender, RoutedEventArgs e)
         {
-            HandleConversation(Messages.Prompts.Food, Messages.Responses.Food, "mascot_hungry.png");
+            HandleConversation(Messages.Prompts.Food, "Food", "hungry");
         }
 
         private void MusicButton_Click(object sender, RoutedEventArgs e)
         {
-            HandleConversation(Messages.Prompts.Music, Messages.Responses.Music, "mascot_happy.png");
+            HandleConversation(Messages.Prompts.Music, "Music", "happy");
         }
 
         private void StudyButton_Click(object sender, RoutedEventArgs e)
         {
-            HandleConversation(Messages.Prompts.Study, Messages.Responses.Study, "mascot_thoughtful.png");
+            HandleConversation(Messages.Prompts.Study, "Study", "thoughtful");
         }
 
         private void SleepButton_Click(object sender, RoutedEventArgs e)
         {
-            HandleConversation(Messages.Prompts.Sleep, Messages.Responses.Sleep, "mascot_sleepy.png");
+            HandleConversation(Messages.Prompts.Sleep, "Sleep", "sleepy");
         }
 
         private void ThanksButton_Click(object sender, RoutedEventArgs e)
         {
-            HandleConversation(Messages.Prompts.Thanks, Messages.Responses.Thanks, "mascot_love.png");
+            HandleConversation(Messages.Prompts.Thanks, "Thanks", "love");
         }
     }
-} 
+}

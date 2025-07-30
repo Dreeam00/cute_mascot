@@ -1,0 +1,1 @@
+feat: Implement mascot expression changes for monologues and add build artifacts to .gitignore

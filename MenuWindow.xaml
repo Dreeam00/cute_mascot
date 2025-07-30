@@ -64,6 +64,15 @@
                 <TextBlock Text="メニュー" Style="{StaticResource MenuHeaderStyle}"/>
                 <Rectangle Style="{StaticResource MenuSeparatorStyle}"/>
 
+                <Rectangle Style="{StaticResource MenuSeparatorStyle}"/>
+
+                <TextBlock Text="マスコット選択" Style="{StaticResource MenuHeaderStyle}"/>
+                <ComboBox x:Name="MascotSelectionComboBox" Margin="0,5,0,10" SelectionChanged="MascotSelectionComboBox_SelectionChanged">
+                    <ComboBoxItem Content="Mascot"/>
+                    <ComboBoxItem Content="Lumina"/>
+                    <ComboBoxItem Content="Planet"/>
+                </ComboBox>
+
                 <Button x:Name="PlayModeButton" Content="遊び" Style="{StaticResource MenuButtonStyle}" Click="PlayModeButton_Click"/>
                 <StackPanel x:Name="GameModesPanel" Visibility="Collapsed" Margin="0,5,0,0">
                     <Button x:Name="JumpModeButton" Content="ジャンプ" Style="{StaticResource MenuButtonStyle}" Click="JumpModeButton_Click"/>

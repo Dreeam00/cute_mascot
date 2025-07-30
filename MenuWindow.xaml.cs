@@ -1,8 +1,11 @@
 #nullable enable
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace MascotApp
 {
@@ -14,6 +17,77 @@ namespace MascotApp
         {
             InitializeComponent();
             _mainWindow = mainWindow;
+            LoadMascotSelection();
+        }
+
+        private void LoadMascotSelection()
+        {
+            try
+            {
+                string settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.json");
+                if (File.Exists(settingsPath))
+                {
+                    string json = File.ReadAllText(settingsPath);
+                    dynamic? settings = JsonConvert.DeserializeObject(json);
+                    string currentMascot = settings?.current_mascot?.ToString() ?? "Mascot";
+                    if (settings != null && settings.current_mascot != null)
+                    {
+                        currentMascot = settings.current_mascot.ToString();
+                    }
+
+                    // イベントハンドラを一時的に解除して、不要な再起動を防ぐ
+                    if (MascotSelectionComboBox != null)
+                    {
+                        MascotSelectionComboBox.SelectionChanged -= MascotSelectionComboBox_SelectionChanged;
+
+                        foreach (ComboBoxItem item in MascotSelectionComboBox.Items.OfType<ComboBoxItem>())
+                        {
+                            if (item.Content?.ToString() == currentMascot)
+                            {
+                                item.IsSelected = true;
+                                break;
+                            }
+                        }
+
+                        MascotSelectionComboBox.SelectionChanged += MascotSelectionComboBox_SelectionChanged;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"設定の読み込み中にエラーが発生しました: {ex.Message}");
+            }
+        }
+
+        private void MascotSelectionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (MascotSelectionComboBox.SelectedItem is ComboBoxItem selectedItem)
+            {
+                string selectedMascot = selectedItem.Content?.ToString() ?? string.Empty;
+                try
+                {
+                    string settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.json");
+                    string json = File.ReadAllText(settingsPath);
+                    dynamic? settings = JsonConvert.DeserializeObject(json);
+                    if (settings == null)
+                    {
+                        settings = new System.Dynamic.ExpandoObject();
+                    }
+                    // Ensure settings is not null before using it
+                    dynamic nonNullableSettings = settings!; // Use null-forgiving operator as we know it's not null here
+                    nonNullableSettings.current_mascot = selectedMascot;
+                    string newJson = JsonConvert.SerializeObject(settings, Formatting.Indented);
+                    File.WriteAllText(settingsPath, newJson);
+
+                    // アプリケーションを再起動して変更を適用
+                    System.Windows.Forms.Application.Restart();
+                    Application.Current.Shutdown();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"設定の保存中にエラーが発生しました: {ex.Message}");
+                }
+            }
         }
 
         private void PlayModeButton_Click(object sender, RoutedEventArgs e)

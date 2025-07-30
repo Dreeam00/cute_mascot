@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "D:\\mascot\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6B01C954-84EE-8A70-259D-7B4B2796D6C2}|MascotApp.csproj|d:\\mascot\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{6B01C954-84EE-8A70-259D-7B4B2796D6C2}|MascotApp.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{6B01C954-84EE-8A70-259D-7B4B2796D6C2}|MascotApp.csproj|d:\\mascot\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6B01C954-84EE-8A70-259D-7B4B2796D6C2}|MascotApp.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{6B01C954-84EE-8A70-259D-7B4B2796D6C2}|MascotApp.csproj|d:\\mascot\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -15,8 +15,15 @@
       "RelativeMoniker": "D:0:0:{6B01C954-84EE-8A70-259D-7B4B2796D6C2}|MascotApp.csproj|solutionrelative:messages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{6B01C954-84EE-8A70-259D-7B4B2796D6C2}|MascotApp.csproj|d:\\mascot\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{6B01C954-84EE-8A70-259D-7B4B2796D6C2}|MascotApp.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{6B01C954-84EE-8A70-259D-7B4B2796D6C2}|MascotApp.csproj|d:\\mascot\\mascotjumpwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6B01C954-84EE-8A70-259D-7B4B2796D6C2}|MascotApp.csproj|solutionrelative:mascotjumpwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\yoshy\\AppData\\Local\\Temp\\.vsdbgsrc\\2f0dca2f43dd24d4bbf4714160b08a739bb996fc3e546d135000c04682f8aa7c\\XamlReader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +33,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -35,10 +42,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
             },
             {
               "$type": "Bookmark",
@@ -54,7 +57,30 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "D:\\mascot\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "MainWindow.xaml.cs",
+              "ToolTip": "D:\\mascot\\MainWindow.xaml.cs",
+              "RelativeToolTip": "MainWindow.xaml.cs",
+              "ViewState": "AgIAAHkBAAAAAAAAAAAAAL8BAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-30T09:31:40.842Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "XamlReader.cs",
+              "DocumentMoniker": "C:\\Users\\yoshy\\AppData\\Local\\Temp\\.vsdbgsrc\\2f0dca2f43dd24d4bbf4714160b08a739bb996fc3e546d135000c04682f8aa7c\\XamlReader.cs",
+              "ToolTip": "C:\\Users\\yoshy\\AppData\\Local\\Temp\\.vsdbgsrc\\2f0dca2f43dd24d4bbf4714160b08a739bb996fc3e546d135000c04682f8aa7c\\XamlReader.cs",
+              "ViewState": "AgIAAMsBAAAAAAAAAAAnwNkBAAACAAAAAQAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-30T08:51:16.299Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "MascotJumpWindow.xaml.cs",
               "DocumentMoniker": "D:\\mascot\\MascotJumpWindow.xaml.cs",
               "RelativeDocumentMoniker": "MascotJumpWindow.xaml.cs",
@@ -66,15 +92,14 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "D:\\mascot\\MainWindow.xaml",
               "RelativeDocumentMoniker": "MainWindow.xaml",
-              "ToolTip": "D:\\mascot\\MainWindow.xaml*",
-              "RelativeToolTip": "MainWindow.xaml*",
+              "ToolTip": "D:\\mascot\\MainWindow.xaml",
+              "RelativeToolTip": "MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-07-05T10:39:03.145Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-05T10:39:03.145Z"
             },
             {
               "$type": "Document",
@@ -85,8 +110,7 @@
               "ToolTip": "D:\\mascot\\App.xaml",
               "RelativeToolTip": "App.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-07-05T10:39:00.311Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-05T10:39:00.311Z"
             },
             {
               "$type": "Document",
@@ -96,7 +120,7 @@
               "RelativeDocumentMoniker": "Messages.cs",
               "ToolTip": "D:\\mascot\\Messages.cs",
               "RelativeToolTip": "Messages.cs",
-              "ViewState": "AgIAADkAAAAAAAAAAAAAAEkAAAASAAAAAAAAAA==",
+              "ViewState": "AgIAADkAAAAAAAAAAAAAAEkAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-05T11:03:40.573Z"
             }
