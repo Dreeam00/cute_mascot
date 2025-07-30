@@ -325,41 +325,11 @@ namespace MascotApp
                 return;
             }
 
-            string[] monologues = new string[]
-            {
-                "おなかすいたなぁ…",
-                "ねむねむ…",
-                "きょうもいちにちがんばろうね！",
-                "ねぇねぇ、あそぼ！",
-                "Zzz...",
-                "ふぅ…",
-                "なんかいいことないかなぁ…",
-                "ぽかぽか…",
-                "うーん…",
-                "はっ！",
-                "…",
-                "ぴょんぴょん！"
-            };
+            var monologueEntry = Messages.Monologues.MonologueList[random.Next(Messages.Monologues.MonologueList.Length)];
+            string monologue = monologueEntry.Text;
+            string imageName = monologueEntry.Image;
 
-            string monologue = monologues[random.Next(monologues.Length)];
-
-            // 独り言の内容に応じて表情を切り替える
-            if (monologue.Contains("おなかすいた"))
-            {
-                SetMascotImage("mascot_hungry.png");
-            }
-            else if (monologue.Contains("ねむねむ") || monologue.Contains("Zzz"))
-            {
-                SetMascotImage("mascot_sleepy.png");
-            }
-            else if (monologue.Contains("うーん") || monologue.Contains("なんかいいことないかなぁ"))
-            {
-                SetMascotImage("mascot_thoughtful.png");
-            }
-            else
-            {
-                SetMascotImage("mascot.png"); // デフォルトの表情
-            }
+            SetMascotImage(imageName);
 
             ShowMascotBubble(monologue);
 

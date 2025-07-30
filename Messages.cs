@@ -171,6 +171,9 @@ namespace MascotApp
                 "ねぇねぇ、一緒におしゃべりしない？",
                 "こんにちわ！なにかこまってること、ある？"
             };
+            public static readonly string[] DefaultImages = {
+                "mascot_thoughtful.png", "mascot_happy.png", "mascot_thoughtful.png", "mascot_happy.png", "mascot_thoughtful.png"
+            };
         }
 
         /// <summary>
@@ -194,6 +197,28 @@ namespace MascotApp
             var random = new Random();
             var message = timeMessages[random.Next(timeMessages.Length)];
             return string.Format(message, DateTime.Now);
+        }
+
+        /// <summary>
+        /// 独り言のメッセージと対応する表情を管理するクラス
+        /// </summary>
+        public static class Monologues
+        {
+            public static readonly (string Text, string Image)[] MonologueList = new (string, string)[]
+            {
+                ("おなかすいたなぁ…", "mascot_hungry.png"),
+                ("ねむねむ…", "mascot_sleepy.png"),
+                ("きょうもいちにちがんばろうね！", "mascot_happy.png"),
+                ("ねぇねぇ、あそぼ！", "mascot_happy.png"),
+                ("Zzz...", "mascot_sleepy.png"),
+                ("ふぅ…", "mascot_thoughtful.png"),
+                ("なんかいいことないかなぁ…", "mascot_thoughtful.png"),
+                ("ぽかぽか…", "mascot_love.png"),
+                ("うーん…", "mascot_thoughtful.png"),
+                ("はっ！", "mascot_happy.png"),
+                ("…", "mascot_thoughtful.png"),
+                ("ぴょんぴょん！", "mascot_happy.png")
+            };
         }
     }
 } 

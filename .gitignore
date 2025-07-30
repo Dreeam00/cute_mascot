@@ -1,16 +1,50 @@
+# Ignore Visual Studio temporary files, build results, and
+# other generated files.
+#
+# For more information on customizing your .gitignore file, please visit:
+# https://docs.github.com/en/github/excluding-files-from-your-repository/ignoring-files-with-gitignore
+
 # Visual Studio
 .vs/
 *.suo
 *.user
+*.userosscache
 *.sln.docstates
 
-# Build artifacts
-bin/
-obj/
+# Build results
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
 
-# NuGet
+# Packages
 *.nupkg
-*.lock.json
+*.snupkg
+*.vsix
+*.appx
+*.msi
+*.msp
+*.msm
+*.zip
+
+# Rider
+.idea/
+*.iml
+
+# SonarQube
+.sonarqube/
+.sonarqube.properties
 
 # Other
-log.txt
+*.log
+*.bak
+*.tmp
+*.pdb
+*.opendb
+*.sqlite
+*.db
+*.cache
+*.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
